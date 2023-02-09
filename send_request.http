@@ -1,0 +1,30 @@
+POST http://127.0.0.1:2000/order/add
+Content-Type: application/json
+
+{
+    "createDate" : "2022-01-01",
+    "customerId" : 1
+}
+
+
+###
+
+POST http://127.0.0.1:2000/payment/add
+Content-Type: application/json
+
+{
+    "amount" : 2000.4000,
+    "orderId" : 1
+}
+
+###
+
+POST http://127.0.0.1:2000/customer/add
+Content-Type: application/json
+
+{
+    "name" : "JOJO",
+    "deliveryAddress" : "ijojo@gmail.com",
+    "contact" : "+228 97 80 08 17",
+    "active" : true
+}
