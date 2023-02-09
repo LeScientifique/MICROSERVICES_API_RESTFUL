@@ -17,6 +17,7 @@ from flask import Flask, request, jsonify, render_template
 with app.app_context():
     db.drop_all()
     db.create_all()
+    
 
 
 """Methode et route"""
