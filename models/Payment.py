@@ -3,6 +3,7 @@ from config import db
 class Payment (db.Model):
     id = db.Column(db.Integer, primary_key = True)
     amount = db.Column(db.Float, nullable = False)
+    payment_mode = db.Column(db.String(12))
 
     ## OneToMany de Order vers payment
     orderId = db.Column(db.Integer, db.ForeignKey('order.id'), nullable = True)

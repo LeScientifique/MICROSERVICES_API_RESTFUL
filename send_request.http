@@ -1,23 +1,36 @@
-POST http://127.0.0.1:2000/order/add
+### AJOUT CASH
+
+POST http://127.0.0.1:2000/Cash/add
 Content-Type: application/json
 
 {
-    "createDate" : "2022-01-01",
-    "customerId" : 1
+    "cashTendered" : "12.99"
 }
 
+### AJOUT CHECK
 
-###
-
-POST http://127.0.0.1:2000/payment/add
+POST http://127.0.0.1:2000/check/add
 Content-Type: application/json
 
 {
-    "amount" : 2000.4000,
-    "orderId" : 1
+    "name" : "Blaise",
+    "bankID" : "0000-0000-0011-1111"
 }
 
-###
+
+### AJOUT CREDIT
+
+POST http://127.0.0.1:2000/credit/add
+Content-Type: application/json
+
+{
+    "number" : "1000 $",
+    "types" : "Pret",
+    "expireDate" : "2025-02-14"
+}
+
+
+### AJOUT CUSTOMER
 
 POST http://127.0.0.1:2000/customer/add
 Content-Type: application/json
@@ -28,3 +41,97 @@ Content-Type: application/json
     "contact" : "+228 97 80 08 17",
     "active" : true
 }
+
+
+### AJOUT ITEM
+
+POST http://127.0.0.1:2000/item/add
+Content-Type: application/json
+
+{
+    "weight" : 14.5 ,
+    "description" : "Le poids minimal"
+}
+
+
+### AJOUT ORDER
+POST http://127.0.0.1:2000/order/add
+Content-Type: application/json
+
+{
+    "createDate" : "2022-01-01",
+    "customerId" : 1
+}
+
+### AJOUT ORDER DETAIL
+POST http://127.0.0.1:2000/orderDetail/add
+Content-Type: application/json
+
+{
+    "qty" : 100,
+    "taxStatus" : "Actif",
+    "itemId" : 1,
+    "orderId" : 1
+}
+
+### AJOUT ORDER STATUS
+POST http://127.0.0.1:2000/orderStatus/add
+Content-Type: application/json
+
+{
+    "CREATE" : 1,
+    "SHIPPING" : 1,
+    "DELIVERED" : 2,
+    "PAID" : 3
+}
+
+
+### AJOUT PAYMENT
+
+POST http://127.0.0.1:2000/payment/add
+Content-Type: application/json
+
+{
+    "amount" : 24.000,
+    "payment_mode" : "Check",
+    "orderId" : 1
+}
+
+
+### AJOUT WIRE TRANSFER
+
+POST http://127.0.0.1:2000/wiretransfer/add
+Content-Type: application/json
+
+{
+    "bankID" : "Eco_0001",
+    "bankName" : "Ecobank"
+}
+
+
+### GET cash
+GET http://127.0.0.1:2000/cash
+
+### GET check
+GET http://127.0.0.1:2000/check
+
+### GET credit
+GET http://127.0.0.1:2000/credit
+
+### GET item
+GET http://127.0.0.1:2000/item
+
+### GET order
+GET http://127.0.0.1:2000/order
+
+### GET order detail
+GET http://127.0.0.1:2000/orderDetail
+
+### GET order status
+GET http://127.0.0.1:2000//orderStatus
+
+### GET payment
+GET http://127.0.0.1:2000//payment
+
+### GET wire transfert
+GET http://127.0.0.1:2000//wireTransfer
