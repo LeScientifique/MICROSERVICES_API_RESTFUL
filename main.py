@@ -15,7 +15,7 @@ from models.WireTransfer import WireTransfer
 from flask import Flask, request, jsonify, render_template
 
 with app.app_context():
-    db.drop_all()
+    # db.drop_all()
     db.create_all()
 
 """Methode et route"""
@@ -35,13 +35,16 @@ def cash_add():
         json = request.json
         print(json)
         cashTendered = json['cashTendered']
+        amount = json['amount']
+        payment_mode = json['payment_mode']
+        orderId = json['orderId']
 
         if cashTendered and request.method == 'POST':
            
             print("******************")
+           
+            cashs = Cash(cashTendered = cashTendered, amount = amount, payment_mode = payment_mode, orderId = orderId)
             
-            cashs = Cash(cashTendered = cashTendered)
-
             db.session.add(cashs)
             db.session.commit()
             resultat = jsonify('New Cash add')
@@ -49,7 +52,7 @@ def cash_add():
 
     except Exception as e :
         print(e)
-        resultat = {"code_status" : 404, "message" : "Error"}
+        resultat = {"code_status" : 400, "message" : "Une erreur s'est produite" }
         return jsonify(resultat)
     finally :
         db.session.rollback()
@@ -75,7 +78,7 @@ def get_cashs():
         return resultat
     except Exception as e:
         print(e)
-        resultat = {"code_status" : 404, "message" : 'Error'}
+        resultat = {"code_status" : 400, "message" : 'Error'}
         return resultat
     finally:
         db.session.rollback()
@@ -101,12 +104,15 @@ def check_add():
         print(json)
         name = json['name']
         bankID = json['bankID']
+        amount = json['amount']
+        payment_mode = json['payment_mode']
+        orderId = json['orderId']
 
         if name and bankID and request.method == 'POST':
            
             print("******************")
             
-            checks = Check(name = name, bankID = bankID)
+            checks = Check(name = name, bankID = bankID, amount = amount, payment_mode = payment_mode, orderId = orderId)
 
             db.session.add(checks)
             db.session.commit()
@@ -115,7 +121,7 @@ def check_add():
 
     except Exception as e :
         print(e)
-        resultat = {"code_status" : 404, "message" : "Error"}
+        resultat = {"code_status" : 400, "message" : "Error"}
         return jsonify(resultat)
     finally :
         db.session.rollback()
@@ -144,7 +150,7 @@ def get_checks():
         return resultat
     except Exception as e:
         print(e)
-        resultat = {"code_status" : 404, "message" : 'Error'}
+        resultat = {"code_status" : 400, "message" : 'Error'}
         return resultat
     finally:
         db.session.rollback()
@@ -171,12 +177,15 @@ def credit_add():
         number = json['number']
         types = json['types']
         expireDate = json['expireDate']
+        amount = json['amount']
+        payment_mode = json['payment_mode']
+        orderId = json['orderId']
 
         if number and types and expireDate and request.method == 'POST':
            
             print("******************")
 
-            credit = Credit(number = number, types = types, expireDate = expireDate)
+            credit = Credit(number = number, types = types, expireDate = expireDate, amount = amount, payment_mode = payment_mode, orderId = orderId)
 
             db.session.add(credit)
             db.session.commit()
@@ -185,7 +194,7 @@ def credit_add():
 
     except Exception as e :
         print(e)
-        resultat = {"code_status" : 404, "message" : "Error"}
+        resultat = {"code_status" : 400, "message" : "Error"}
         return jsonify(resultat)
     finally :
         db.session.rollback()
@@ -215,7 +224,7 @@ def get_credits():
         return resultat
     except Exception as e:
         print(e)
-        resultat = {"code_status" : 404, "message" : 'Error'}
+        resultat = {"code_status" : 400, "message" : 'Error'}
         return resultat
     finally:
         db.session.rollback()
@@ -257,7 +266,7 @@ def customer_add():
 
     except Exception as e :
         print(e)
-        resultat = {"code_status" : 404, "message" : "Error"}
+        resultat = {"code_status" : 400, "message" : "Error"}
         return jsonify(resultat)
     finally :
         db.session.rollback()
@@ -289,7 +298,7 @@ def get_customers():
         return resultat
     except Exception as e:
         print(e)
-        resultat = {"code_status" : 404, "message" : 'Error'}
+        resultat = {"code_status" : 400, "message" : 'Error'}
         return resultat
     finally:
         db.session.rollback()
@@ -329,7 +338,7 @@ def item_add():
 
     except Exception as e :
         print(e)
-        resultat = {"code_status" : 404, "message" : "Error"}
+        resultat = {"code_status" : 400, "message" : "Error"}
         return jsonify(resultat)
     finally :
         db.session.rollback()
@@ -358,7 +367,7 @@ def get_items():
         return resultat
     except Exception as e:
         print(e)
-        resultat = {"code_status" : 404, "message" : 'Error'}
+        resultat = {"code_status" : 400, "message" : 'Error'}
         return resultat
     finally:
         db.session.rollback()
@@ -403,7 +412,7 @@ def order_add():
 
     except Exception as e :
         print(e)
-        resultat = {"code_status" : 404, "message" : "Error"}
+        resultat = {"code_status" : 400, "message" : "Error"}
         return jsonify(resultat)
     finally :
         db.session.rollback()
@@ -431,7 +440,7 @@ def get_orders():
         return resultat
     except Exception as e:
         print(e)
-        resultat = {"code_status" : 404, "message" : 'Error'}
+        resultat = {"code_status" : 400, "message" : 'Error'}
         return resultat
     finally:
         db.session.rollback()
@@ -480,7 +489,7 @@ def orderdetail_add():
 
     except Exception as e :
         print(e)
-        resultat = {"code_status" : 404, "message" : "Error"}
+        resultat = {"code_status" : 400, "message" : "Error"}
         return jsonify(resultat)
     finally :
         db.session.rollback()
@@ -511,7 +520,7 @@ def get_orderdetails():
         return resultat
     except Exception as e:
         print(e)
-        resultat = {"code_status" : 404, "message" : 'Error'}
+        resultat = {"code_status" : 400, "message" : 'Error'}
         return resultat
     finally:
         db.session.rollback()
@@ -552,7 +561,7 @@ def orderstatus_add():
 
     except Exception as e :
         print(e)
-        resultat = {"code_status" : 404, "message" : "Error"}
+        resultat = {"code_status" : 400, "message" : "Error"}
         return jsonify(resultat)
     finally :
         db.session.rollback()
@@ -583,7 +592,7 @@ def get_orderstatus():
         return resultat
     except Exception as e:
         print(e)
-        resultat = {"code_status" : 404, "message" : 'Error'}
+        resultat = {"code_status" : 400, "message" : 'Error'}
         return resultat
     finally:
         db.session.rollback()
@@ -626,7 +635,7 @@ def payment_add():
 
     except Exception as e :
         print(e)
-        resultat = {"code_status" : 404, "message" : "Error"}
+        resultat = e
         return jsonify(resultat)
     finally :
         db.session.rollback()
@@ -655,7 +664,7 @@ def get_payments():
         return resultat
     except Exception as e:
         print(e)
-        resultat = {"code_status" : 404, "message" : 'Error'}
+        resultat = {"code_status" : 400, "message" : 'Error'}
         return resultat
     finally:
         db.session.rollback()
@@ -681,12 +690,15 @@ def wiretransfer_add():
         print(json)
         bankID = json['bankID']
         bankName = json['bankName']
+        amount = json['amount']
+        payment_mode = json['payment_mode']
+        orderId = json['orderId']
 
         if bankID and bankName and request.method == 'POST':
            
             print("******************")
             
-            wiretransfer = WireTransfer(bankID = bankID, bankName = bankName)
+            wiretransfer = WireTransfer(bankID = bankID, bankName = bankName, amount = amount, payment_mode = payment_mode, orderId = orderId)
 
             db.session.add(wiretransfer)
             db.session.commit()
@@ -695,7 +707,7 @@ def wiretransfer_add():
 
     except Exception as e :
         print(e)
-        resultat = {"code_status" : 404, "message" : "Error"}
+        resultat = {"code_status" : 400, "message" : "Error"}
         return jsonify(resultat)
     finally :
         db.session.rollback()
@@ -725,7 +737,7 @@ def get_wiretransfers():
         return resultat
     except Exception as e:
         print(e)
-        resultat = {"code_status" : 404, "message" : 'Error'}
+        resultat = {"code_status" : 400, "message" : 'Error'}
         return resultat
     finally:
         db.session.rollback()

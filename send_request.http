@@ -4,6 +4,10 @@ POST http://127.0.0.1:2000/Cash/add
 Content-Type: application/json
 
 {
+    "amount" : 30.000,
+    "payment_mode" : "Cash",
+    "orderId" : 2,
+
     "cashTendered" : "12.99"
 }
 
@@ -13,6 +17,9 @@ POST http://127.0.0.1:2000/check/add
 Content-Type: application/json
 
 {
+    "amount" : 32.000,
+    "payment_mode" : "Check",
+    "orderId" : 1,
     "name" : "Blaise",
     "bankID" : "0000-0000-0011-1111"
 }
@@ -25,6 +32,9 @@ POST http://127.0.0.1:2000/credit/add
 Content-Type: application/json
 
 {
+    "amount" : 34.000,
+    "payment_mode" : "Credit",
+    "orderId" : 1,
     "number" : "1000 $",
     "types" : "Pret",
     "expireDate" : "2025-02-14"
@@ -105,6 +115,9 @@ POST http://127.0.0.1:2000/wiretransfer/add
 Content-Type: application/json
 
 {
+    "amount" : 36.000,
+    "payment_mode" : "Wire Transfer",
+    "orderId" : 1,
     "bankID" : "Eco_0001",
     "bankName" : "Ecobank"
 }
