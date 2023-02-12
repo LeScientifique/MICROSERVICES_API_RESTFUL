@@ -52,7 +52,7 @@ def cash_add():
 
     except Exception as e :
         print(e)
-        resultat = {"code_status" : 400, "message" : "Une erreur s'est produite" }
+        resultat = {"code_status" : 400,"message" : "Error" }
         return jsonify(resultat)
     finally :
         db.session.rollback()
