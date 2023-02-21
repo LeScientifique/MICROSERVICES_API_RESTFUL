@@ -6,7 +6,7 @@ Content-Type: application/json
 {
     "amount" : 30.000,
     "payment_mode" : "Cash",
-    "orderId" : 2,
+    "orderId" : 1,
 
     "cashTendered" : "12.99"
 }
@@ -131,6 +131,9 @@ GET http://127.0.0.1:2000/check
 
 ### GET credit
 GET http://127.0.0.1:2000/credit
+
+### GET customer
+GET http://127.0.0.1:2000/customers
 
 ### GET item
 GET http://127.0.0.1:2000/item
