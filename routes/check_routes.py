@@ -113,3 +113,28 @@ def check_update():
     finally:
         db.session.rollback()
         db.session.close()
+
+
+#====================================================== DELETE ===============================================
+
+
+###DELETE de check
+@app.route('/check/delete', methods = ['POST'])
+def delete_check():
+    try:
+        json = request.json
+        id = json['id']
+
+        check = Check.query.filter_by(id=id).first()
+
+        db.session.delete(check)
+        db.session.commit()
+        resultat = jsonify('Check is successfully deleted')
+        return resultat
+    except Exception as e:
+        print(e)
+        resultat = {"code_status": 400, "message": 'Error'}
+        return resultat
+    finally:
+        db.session.rollback()
+        db.session.close()

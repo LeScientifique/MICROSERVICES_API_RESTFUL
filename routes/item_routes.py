@@ -100,3 +100,27 @@ def item_update():
     finally:
         db.session.rollback()
         db.session.close()
+
+
+#====================================================== DELETE ===============================================
+
+###DELETE de item
+@app.route('/item/delete', methods = ['POST'])
+def delete_item():
+    try:
+        json = request.json
+        id = json['id']
+
+        item = Item.query.filter_by(id=id).first()
+        
+        db.session.delete(item)
+        db.session.commit()
+        resultat = jsonify('Item is successfully deleted')
+        return resultat
+    except Exception as e:
+        print(e)
+        resultat = {"code_status": 400, "message": 'Error'}
+        return resultat
+    finally:
+        db.session.rollback()
+        db.session.close()

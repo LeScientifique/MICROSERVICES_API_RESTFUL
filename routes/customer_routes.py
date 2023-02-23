@@ -110,3 +110,27 @@ def customer_update():
     finally:
         db.session.rollback()
         db.session.close()
+
+#====================================================== DELETE ===============================================
+
+###DELETE de customer
+@app.route('/customer/delete', methods = ['POST'])
+def delete_customer():
+    try:
+        json = request.json
+        id = json['id']
+
+        customers = Customer.query.filter_by(id=id).first()
+
+        db.session.delete(customers)
+        db.session.commit()
+        resultat = jsonify('Customer is successfully deleted')
+        return resultat
+    except Exception as e:
+        print(e)
+        resultat = {"code_status": 400, "message": 'Error'}
+        return resultat
+    finally:
+        db.session.rollback()
+        db.session.close()
+

@@ -125,4 +125,27 @@ def orderdetail_update():
 
 
 
+#====================================================== DELETE ===============================================
+
+###DELETE de orderDetail
+@app.route('/orderDetail/delete', methods = ['POST'])
+def delete_order_detail():
+    try:
+        json = request.json
+        id = json['id']
+
+        orderdetail = OrderDetail.query.filter_by(id=id).first()
+
+        db.session.delete(orderdetail)
+        db.session.commit()
+        resultat = jsonify('Order detail is successfully deleted')
+        return resultat
+    except Exception as e:
+        print(e)
+        resultat = {"code_status": 400, "message": 'Error'}
+        return resultat
+    finally:
+        db.session.rollback()
+        db.session.close()
+
 

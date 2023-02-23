@@ -114,5 +114,27 @@ def wiretransfer_update():
 
 
 
+#====================================================== DELETE ===============================================
+
+###DELETE de wireTansfer
+@app.route('/wireTansfer/delete', methods = ['POST'])
+def delete_wire_transfer():
+    try:
+        json = request.json
+        id = json['id']
+
+        wire_transfer = WireTransfer.query.filter_by(id=id).first()
+
+        db.session.delete(wire_transfer)
+        db.session.commit()
+        resultat = jsonify('WireTransfer is successfully deleted')
+        return resultat
+    except Exception as e:
+        print(e)
+        resultat = {"code_status": 400, "message": 'Error'}
+        return resultat
+    finally:
+        db.session.rollback()
+        db.session.close()
 
 

@@ -112,5 +112,28 @@ def orderstatus_update():
 
 
 
+#====================================================== DELETE ===============================================
+
+###DELETE de orderStatus
+@app.route('/orderStatus/delete', methods = ['POST'])
+def delete_order_status():
+    try:
+        json = request.json
+        id = json['id']
+
+        order_status = OrderStatus.query.filter_by(id=id).first()
+
+        db.session.delete(order_status)
+        db.session.commit()
+        resultat = jsonify('Order status is successfully deleted')
+        return resultat
+    except Exception as e:
+        print(e)
+        resultat = {"code_status": 400, "message": 'Error'}
+        return resultat
+    finally:
+        db.session.rollback()
+        db.session.close()
+
 
 

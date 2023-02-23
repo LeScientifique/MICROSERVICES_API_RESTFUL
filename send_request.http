@@ -74,8 +74,8 @@ POST http://127.0.0.1:2000/order/add
 Content-Type: application/json
 
 {
-    "createDate" : "2022-01-01",
-    "customerId" : 1
+    "createDate" : "2022-10-01",
+    "customerId" : 2
 }
 
 ### AJOUT ORDER DETAIL
@@ -300,3 +300,87 @@ Content-Type: application/json
 
 
 ###################################################################### DELETE ###################################################################
+
+POST http://127.0.0.1:2000/cash/delete
+Content-Type: application/json
+
+{
+    "id": 12
+}
+
+###
+POST http://127.0.0.1:2000/check/delete
+Content-Type: application/json
+
+{
+    "id": 7
+}
+
+
+###
+POST http://127.0.0.1:2000/credit/delete
+Content-Type: application/json
+
+{
+    "id": 4
+}
+
+###
+POST http://127.0.0.1:2000/customer/delete
+Content-Type: application/json
+
+{
+    "id": 5
+}
+
+###
+
+POST http://127.0.0.1:2000/item/delete
+Content-Type: application/json
+
+{
+    "id": 2
+}
+
+###
+
+POST http://127.0.0.1:2000/order/delete
+Content-Type: application/json
+
+{
+    "id": 4
+}
+
+###
+
+POST http://127.0.0.1:2000/orderDetail/delete
+Content-Type: application/json
+
+{
+    "id": 1
+}
+
+###
+POST http://127.0.0.1:2000/orderStatus/delete
+Content-Type: application/json
+
+{
+    "id": 2
+}
+
+###
+POST http://127.0.0.1:2000/payment/delete
+Content-Type: application/json
+
+{
+    "id": 10
+}
+
+###
+POST http://127.0.0.1:2000/wireTansfer/delete
+Content-Type: application/json
+
+{
+    "id": 5
+}
+

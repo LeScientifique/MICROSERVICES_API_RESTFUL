@@ -113,3 +113,25 @@ def payment_update():
 
 
 
+#====================================================== DELETE ===============================================
+
+###DELETE de payment
+@app.route('/payment/delete', methods = ['POST'])
+def delete_payment():
+    try:
+        json = request.json
+        id = json['id']
+
+        payment = Payment.query.filter_by(id=id).first()
+
+        db.session.delete(payment)
+        db.session.commit()
+        resultat = jsonify('Payment is successfully deleted')
+        return resultat
+    except Exception as e:
+        print(e)
+        resultat = {"code_status": 400, "message": 'Error'}
+        return resultat
+    finally:
+        db.session.rollback()
+        db.session.close()

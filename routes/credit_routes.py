@@ -116,3 +116,27 @@ def credit_update():
     finally:
         db.session.rollback()
         db.session.close()
+
+
+#====================================================== DELETE ===============================================
+
+###DELETE de credit
+@app.route('/credit/delete', methods = ['POST'])
+def delete_credit():
+    try:
+        json = request.json
+        id = json['id']
+
+        credit = Credit.query.filter_by(id=id).first()
+
+        db.session.delete(credit)
+        db.session.commit()
+        resultat = jsonify('Credit is successfully deleted')
+        return resultat
+    except Exception as e:
+        print(e)
+        resultat = {"code_status": 400, "message": 'Error'}
+        return resultat
+    finally:
+        db.session.rollback()
+        db.session.close()
