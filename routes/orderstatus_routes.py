@@ -76,3 +76,41 @@ def get_orderstatus():
         db.session.rollback()
         db.session.close()
 
+
+#====================================================== UPDATE ===============================================
+
+
+@app.route('/order-status/update', methods = ['POST', 'GET'])
+def orderstatus_update():
+    try:
+        data = request.json
+        id = data["id"]
+        CREATE = data['CREATE']
+        SHIPPING = data['SHIPPING']
+        DELIVERED = data['DELIVERED']
+        PAID = data['PAID']
+
+        orderstatus = OrderStatus.query.filter_by(id=id).first()
+        
+        if id and CREATE and SHIPPING and DELIVERED and PAID and request.method == 'POST':
+
+            orderstatus.CREATE = CREATE
+            orderstatus.SHIPPING = SHIPPING
+            orderstatus.DELIVERED = DELIVERED
+            orderstatus.PAID = PAID
+
+            db.session.commit()
+            resultat = jsonify('Order status is update')
+            return resultat
+    except Exception as e:
+        print(e)
+        resultat = {"code_status": 400, "message": 'Error'}
+        return jsonify(resultat)
+    finally:
+        db.session.rollback()
+        db.session.close()
+
+
+
+
+

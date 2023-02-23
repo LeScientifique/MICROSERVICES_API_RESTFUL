@@ -80,3 +80,39 @@ def get_credits():
         db.session.close()
 
 
+#====================================================== UPDATE ===============================================
+
+
+@app.route('/credit/update', methods = ['POST', 'GET'])
+def credit_update():
+    try:
+        data = request.json
+        id = data["id"]
+        number = data['number']
+        types = data['types']
+        expireDate = data['expireDate']
+        amount = data['amount']
+        payment_mode = data['payment_mode']
+        orderId = data['orderId']
+
+
+        credit = Credit.query.filter_by(id=id).first()
+        
+        if id and number and types and expireDate and amount and payment_mode and orderId and request.method == 'POST':
+
+            credit.number = number
+            credit.types = types
+            credit.expireDate = expireDate
+            credit.amount = amount
+            credit.payment_mode = payment_mode
+            credit.orderId = orderId
+            db.session.commit()
+            resultat = jsonify('Credit is update')
+            return resultat
+    except Exception as e:
+        print(e)
+        resultat = {"code_status": 400, "message": 'Error'}
+        return jsonify(resultat)
+    finally:
+        db.session.rollback()
+        db.session.close()

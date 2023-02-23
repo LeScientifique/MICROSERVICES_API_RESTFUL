@@ -73,3 +73,30 @@ def get_items():
         db.session.close()
 
 
+#====================================================== UPDATE ===============================================
+
+
+@app.route('/item/update', methods = ['POST', 'GET'])
+def item_update():
+    try:
+        data = request.json
+        id = data["id"]
+        weight = data['weight']
+        description = data['description']
+
+        items = Item.query.filter_by(id=id).first()
+        
+        if id and weight and description and request.method == 'POST':
+
+            items.weight = weight
+            items.description = description
+            db.session.commit()
+            resultat = jsonify('item is update')
+            return resultat
+    except Exception as e:
+        print(e)
+        resultat = {"code_status": 400, "message": 'Error'}
+        return jsonify(resultat)
+    finally:
+        db.session.rollback()
+        db.session.close()

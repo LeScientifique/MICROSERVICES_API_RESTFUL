@@ -79,3 +79,37 @@ def get_payments():
         db.session.close()
 
 
+#====================================================== UPDATE ===============================================
+
+
+@app.route('/payment/update', methods = ['POST', 'GET'])
+def payment_update():
+    try:
+        data = request.json
+        id = data["id"]
+        amount = data['amount']
+        payment_mode = data['payment_mode']
+        orderId = data['orderId']
+
+        payment = Payment.query.filter_by(id=id).first()
+        
+        if id and amount and payment_mode and orderId and request.method == 'POST':
+
+            payment.amount = amount
+            payment.payment_mode = payment_mode
+            payment.orderId = orderId
+
+            db.session.commit()
+            resultat = jsonify('Payment is update')
+            return resultat
+    except Exception as e:
+        print(e)
+        resultat = {"code_status": 400, "message": 'Error'}
+        return jsonify(resultat)
+    finally:
+        db.session.rollback()
+        db.session.close()
+
+
+
+

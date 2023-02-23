@@ -79,3 +79,34 @@ def get_customers():
         db.session.close()
 
 
+#====================================================== UPDATE ===============================================
+
+
+@app.route('/customer/update', methods = ['POST', 'GET'])
+def customer_update():
+    try:
+        data = request.json
+        id = data["id"]
+        name = data["name"]
+        deliveryAddress = data["deliveryAddress"]
+        contact = data["contact"]
+        active = data["active"]
+
+        customers = Customer.query.filter_by(id=id).first()
+        
+        if id and name and deliveryAddress and contact and active and request.method == 'POST':
+
+            customers.name = name
+            customers.deliveryAddress = deliveryAddress
+            customers.contact = contact
+            customers.active = active
+            db.session.commit()
+            resultat = jsonify('Customer is update')
+            return resultat
+    except Exception as e:
+        print(e)
+        resultat = {"code_status": 400, "message": 'Error'}
+        return jsonify(resultat)
+    finally:
+        db.session.rollback()
+        db.session.close()

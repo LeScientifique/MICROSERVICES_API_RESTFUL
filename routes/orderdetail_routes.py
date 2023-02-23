@@ -90,3 +90,39 @@ def get_orderdetails():
 
 
 
+#====================================================== UPDATE ===============================================
+
+
+@app.route('/order-detail/update', methods = ['POST', 'GET'])
+def orderdetail_update():
+    try:
+        data = request.json
+        id = data["id"]
+        qty = data['qty']
+        taxStatus = data['taxStatus']
+        orderId = data['orderId']
+        itemId = data['itemId']
+
+        orderdetails = OrderDetail.query.filter_by(id=id).first()
+        
+        if id and qty and taxStatus and orderId and itemId and request.method == 'POST':
+
+            orderdetails.qty = qty
+            orderdetails.taxStatus = taxStatus
+            orderdetails.orderId = orderId
+            orderdetails.itemId = itemId
+
+            db.session.commit()
+            resultat = jsonify('Order detail is update')
+            return resultat
+    except Exception as e:
+        print(e)
+        resultat = {"code_status": 400, "message": 'Error'}
+        return jsonify(resultat)
+    finally:
+        db.session.rollback()
+        db.session.close()
+
+
+
+

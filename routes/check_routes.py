@@ -80,3 +80,36 @@ def get_checks():
         db.session.close()
 
 
+#====================================================== UPDATE ===============================================
+
+
+@app.route('/check/update', methods = ['POST', 'GET'])
+def check_update():
+    try:
+        data = request.json
+        id = data["id"]
+        name = data['name']
+        bankID = data['bankID']
+        amount = data['amount']
+        payment_mode = data['payment_mode']
+        orderId = data['orderId']
+
+        checks = Check.query.filter_by(id=id).first()
+        
+        if id and name and bankID and amount and payment_mode and orderId and request.method == 'POST':
+
+            checks.name = name
+            checks.bankID = bankID
+            checks.amount = amount
+            checks.payment_mode = payment_mode
+            checks.orderId = orderId
+            db.session.commit()
+            resultat = jsonify('Check is update')
+            return resultat
+    except Exception as e:
+        print(e)
+        resultat = {"code_status": 400, "message": 'Error'}
+        return jsonify(resultat)
+    finally:
+        db.session.rollback()
+        db.session.close()

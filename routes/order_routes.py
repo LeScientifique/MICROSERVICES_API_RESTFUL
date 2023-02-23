@@ -78,3 +78,31 @@ def get_orders():
         db.session.close()
 
 
+#====================================================== UPDATE ===============================================
+
+
+@app.route('/order/update', methods = ['POST', 'GET'])
+def order_update():
+    try:
+        data = request.json
+        id = data["id"]
+        createDate = data['createDate']
+        customerId = data['customerId']
+
+        orders = Order.query.filter_by(id=id).first()
+        
+        if id and createDate and customerId and request.method == 'POST':
+
+            orders.createDate = createDate
+            orders.customerId = customerId
+
+            db.session.commit()
+            resultat = jsonify('Order is update')
+            return resultat
+    except Exception as e:
+        print(e)
+        resultat = {"code_status": 400, "message": 'Error'}
+        return jsonify(resultat)
+    finally:
+        db.session.rollback()
+        db.session.close()

@@ -79,3 +79,40 @@ def get_wiretransfers():
 
 
 
+#====================================================== UPDATE ===============================================
+
+
+@app.route('/wiretransfer/update', methods = ['POST', 'GET'])
+def wiretransfer_update():
+    try:
+        data = request.json
+        id = data["id"]
+        bankID = data['bankID']
+        bankName = data['bankName']
+        amount = data['amount']
+        payment_mode = data['payment_mode']
+        orderId = data['orderId']
+        wiretransfer = WireTransfer.query.filter_by(id=id).first()
+        
+        if id and bankID and bankName and amount and payment_mode and orderId and request.method == 'POST':
+
+            wiretransfer.bankID = bankID
+            wiretransfer.bankName = bankName
+            wiretransfer.amount = amount
+            wiretransfer.payment_mode = payment_mode
+
+            db.session.commit()
+            resultat = jsonify('Wire Transfer is update')
+            return resultat
+    except Exception as e:
+        print(e)
+        resultat = {"code_status": 400, "message": 'Error'}
+        return jsonify(resultat)
+    finally:
+        db.session.rollback()
+        db.session.close()
+
+
+
+
+
