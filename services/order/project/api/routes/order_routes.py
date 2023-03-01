@@ -1,38 +1,44 @@
 from app import app
-from config import db
-from models.Item import Item
+from services.order.project.config import db
+from models.Customer import Customer
+from models.Order import Order
 from flask import Flask, request, jsonify, render_template
 
 from flask import Blueprint
-item_bp = Blueprint('item', __name__)
+order_bp = Blueprint('order', __name__)
 
 
 #---------------------------------------------------------------------------------------------------------
-#======================================================ITEM===============================================
+#======================================================ORDER===============================================
 #---------------------------------------------------------------------------------------------------------
 
 #======================================================POST===============================================
 
 
-#Methode d'ajout item
+#Methode d'ajout order
 
-@app.route('/item/add', methods = ['POST'])
-def item_add():
+@app.route('/order/add', methods = ['POST'])
+def order_add():
     try:
         json = request.json
         print(json)
-        weight = json['weight']
-        description = json['description']
+        createDate = json['createDate']
+        customerId = json['customerId']
 
-        if weight and description and request.method == 'POST':
+        if createDate and request.method == 'POST':
            
             print("******************")
 
-            item = Item(weight = weight, description = description)
+            orders = Order(createDate = createDate)
 
-            db.session.add(item)
+            if customerId :
+                customer = Customer.query.filter_by(id = customerId).first()
+                print(customer)
+                orders.customer = customer
+
+            db.session.add(orders)
             db.session.commit()
-            resultat = jsonify('New Item add')
+            resultat = jsonify('Order add')
             return resultat
 
     except Exception as e :
@@ -43,25 +49,24 @@ def item_add():
         db.session.rollback()
         db.session.close()
 
-
 #======================================================GET===============================================
 
-#Methode GET pour Item
+#Methode GET pour Cash
 
-@app.route('/item', methods = ['GET'])
-def get_items():
+@app.route('/order', methods = ['GET'])
+def get_orders():
     try:
-        itemsx = Item.query.all()
+        ordersx = Order.query.all()
         data = [
                 {
-                    "id":item.id, 
-                    "weight":item.weight, 
-                    "description":item.description
+                    "id":orders.id, 
+                    "createDate":orders.createDate, 
+                    "customerId":orders.customerId, 
                 } 
-                for item in itemsx
+                for orders in ordersx
                 ]
 
-        resultat = jsonify({"status_code":200, "Item" : data})
+        resultat = jsonify({"status_code":200, "Order" : data})
 
         return resultat
     except Exception as e:
@@ -76,22 +81,23 @@ def get_items():
 #====================================================== UPDATE ===============================================
 
 
-@app.route('/item/update', methods = ['POST', 'GET'])
-def item_update():
+@app.route('/order/update', methods = ['POST', 'GET'])
+def order_update():
     try:
         data = request.json
         id = data["id"]
-        weight = data['weight']
-        description = data['description']
+        createDate = data['createDate']
+        customerId = data['customerId']
 
-        items = Item.query.filter_by(id=id).first()
+        orders = Order.query.filter_by(id=id).first()
         
-        if id and weight and description and request.method == 'POST':
+        if id and createDate and customerId and request.method == 'POST':
 
-            items.weight = weight
-            items.description = description
+            orders.createDate = createDate
+            orders.customerId = customerId
+
             db.session.commit()
-            resultat = jsonify('item is update')
+            resultat = jsonify('Order is update')
             return resultat
     except Exception as e:
         print(e)
@@ -104,18 +110,19 @@ def item_update():
 
 #====================================================== DELETE ===============================================
 
-###DELETE de item
-@app.route('/item/delete', methods = ['POST'])
-def delete_item():
+###DELETE de order
+@app.route('/order/delete', methods = ['POST'])
+def delete_order():
     try:
         json = request.json
         id = json['id']
+        # customerId = json ['customerId']
 
-        item = Item.query.filter_by(id=id).first()
-        
-        db.session.delete(item)
+        orders = Order.query.filter_by(id=id).first()
+
+        db.session.delete(orders)
         db.session.commit()
-        resultat = jsonify('Item is successfully deleted')
+        resultat = jsonify('Order is successfully deleted')
         return resultat
     except Exception as e:
         print(e)
@@ -124,3 +131,4 @@ def delete_item():
     finally:
         db.session.rollback()
         db.session.close()
+

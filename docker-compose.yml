@@ -1,0 +1,28 @@
+version: '3.4'
+services:
+  order:
+    container_name: order
+    build:
+      context: ./services/order
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/order:/usr/src/app'
+    ports:
+      - 5001:5000
+    environment:
+      - FLASK_DEBUG=1
+      - APP_SETTINGS=project.config.DevelopmentConfig
+      - DATABASE_URL=mysql+pymysql://root:mysql@order-db1:3306/order_dev
+    depends_on:
+      - order-db
+    links:
+      - order-db
+  order-db:
+    container_name: order-db
+    build:
+      context: ./services/order/project/db
+      dockerfile: Dockerfile
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=mysql

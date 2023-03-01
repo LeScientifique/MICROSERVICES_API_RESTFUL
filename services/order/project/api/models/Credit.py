@@ -1,4 +1,4 @@
-from config import db
+from services.order.project.config import db
 from models.Payment import Payment
 
 class Credit (Payment):

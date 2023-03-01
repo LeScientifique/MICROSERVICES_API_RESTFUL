@@ -1,15 +1,15 @@
-from app import app
-from config import db
-from routes.cash_routes import cash_bp
-from routes.check_routes import check_bp
-from routes.credit_routes import credit_bp
-from routes.customer_routes import customer_bp
-from routes.item_routes import item_bp
-from routes.order_routes import order_bp
-from routes.orderdetail_routes import orderDetail_bp
-from routes.orderstatus_routes import orderStatus_bp
-from routes.payment_routes import payment_bp
-from routes.wiretransfer_routes import wireTransfer_bp
+from services.order.project import app
+from services.order.project.config import db
+from project.api.routes.cash_routes import cash_bp
+from project.api.routes.check_routes import check_bp
+from project.api.routes.credit_routes import credit_bp
+from project.api.routes.customer_routes import customer_bp
+from project.api.routes.item_routes import item_bp
+from project.api.routes.order_routes import order_bp
+from project.api.routes.orderdetail_routes import orderDetail_bp
+from project.api.routes.orderstatus_routes import orderStatus_bp
+from project.api.routes.payment_routes import payment_bp
+from project.api.routes.wiretransfer_routes import wireTransfer_bp
 
 
 app.app_context().push()

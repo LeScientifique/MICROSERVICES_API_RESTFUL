@@ -1,5 +1,5 @@
 from app import app
-from config import db
+from services.order.project.config import db
 from models.Item import Item
 from models.Order import Order
 from models.OrderDetail import OrderDetail

@@ -75,7 +75,7 @@ Content-Type: application/json
 
 {
     "createDate" : "2022-10-01",
-    "customerId" : 2
+    "customerId" : 3
 }
 
 ### AJOUT ORDER DETAIL
@@ -199,7 +199,7 @@ POST http://127.0.0.1:2000/credit/update
 Content-Type: application/json
 
 {
-    "id" : 8,
+    "id" : 11,
     "amount" : 4.000,
     "payment_mode" : "Credit",
     "orderId" : 1,
@@ -289,7 +289,7 @@ POST http://127.0.0.1:2000/wiretransfer/update
 Content-Type: application/json
 
 {
-    "id" : 11,
+    "id" : 3,
     "amount" : 16.100,
     "payment_mode" : "Wire Transfer",
     "orderId" : 1,
@@ -305,7 +305,7 @@ POST http://127.0.0.1:2000/cash/delete
 Content-Type: application/json
 
 {
-    "id": 12
+    "id": 29
 }
 
 ###
@@ -322,7 +322,7 @@ POST http://127.0.0.1:2000/credit/delete
 Content-Type: application/json
 
 {
-    "id": 4
+    "id": 12
 }
 
 ###
@@ -373,7 +373,7 @@ POST http://127.0.0.1:2000/payment/delete
 Content-Type: application/json
 
 {
-    "id": 10
+    "id": 8
 }
 
 ###
@@ -381,6 +381,6 @@ POST http://127.0.0.1:2000/wireTansfer/delete
 Content-Type: application/json
 
 {
-    "id": 5
+    "id": 24
 }
 

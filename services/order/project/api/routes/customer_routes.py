@@ -1,5 +1,5 @@
 from app import app
-from config import db
+from services.order.project.config import db
 from models.Customer import Customer
 from flask import Flask, request, jsonify, render_template
 

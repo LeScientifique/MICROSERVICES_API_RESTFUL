@@ -1,4 +1,4 @@
-from config import db
+from services.order.project.config import db
 
 class Order (db.Model):
     id = db.Column(db.Integer, primary_key = True)

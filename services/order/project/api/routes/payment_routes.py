@@ -1,72 +1,73 @@
 from app import app
-from config import db
-from models import WireTransfer
-from models.WireTransfer import WireTransfer
-
+from services.order.project.config import db
+from models.Order import Order
+from models.Payment import Payment
 from flask import Flask, request, jsonify, render_template
 
 from flask import Blueprint
-wireTransfer_bp = Blueprint('wireTransfer', __name__)
+payment_bp = Blueprint('payment', __name__)
+
 
 #---------------------------------------------------------------------------------------------------------
-#======================================================WIRE TRANSFER===============================================
+#======================================================PAYMENT===============================================
 #---------------------------------------------------------------------------------------------------------
 
 #======================================================POST===============================================
 
 
-#Methode d'ajout wireTransfer
+#Methode d'ajout payment
 
-@app.route('/wiretransfer/add', methods = ['POST'])
-def wiretransfer_add():
+@app.route('/payment/add', methods = ['POST'])
+def payment_add():
     try:
         json = request.json
         print(json)
-        bankID = json['bankID']
-        bankName = json['bankName']
         amount = json['amount']
         payment_mode = json['payment_mode']
         orderId = json['orderId']
 
-        if bankID and bankName and request.method == 'POST':
+        if amount and request.method == 'POST':
            
             print("******************")
-            
-            wiretransfer = WireTransfer(bankID = bankID, bankName = bankName, amount = amount, payment_mode = payment_mode, orderId = orderId)
+            payments = Payment(amount = amount, payment_mode = payment_mode)
 
-            db.session.add(wiretransfer)
+            if orderId :
+                order = Order.query.filter_by(id = orderId).first()
+                print(order)
+                payments.order = order
+
+            db.session.add(payments)
             db.session.commit()
-            resultat = jsonify('New Wire Transfer add')
+            resultat = jsonify('New Payment add')
             return resultat
 
     except Exception as e :
         print(e)
-        resultat = {"code_status" : 400, "message" : "Error"}
+        resultat = e
         return jsonify(resultat)
     finally :
         db.session.rollback()
         db.session.close()
 
-
-
 #======================================================GET===============================================
 
-#Methode GET pour wireTransfer
+#Methode GET pour payment
 
-@app.route('/wireTransfer', methods = ['GET'])
-def get_wiretransfers():
+@app.route('/payment', methods = ['GET'])
+def get_payments():
     try:
-        wiretransferx = WireTransfer.query.all()
+        paymentsx = Payment.query.all()
         data = [
                 {
-                    "id":wireTransfer.id, 
-                    "bankID":wireTransfer.bankID, 
-                    "bankName":wireTransfer.bankName, 
+                    "id":payments.id, 
+                    "amount":payments.amount,
+                    "payment_mode" : payments.payment_mode, 
+                    "orderId" : payments.orderId
                 } 
-                for wireTransfer in wiretransferx
+                for payments in paymentsx
                 ]
 
-        resultat = jsonify({"status_code":200, "Wire Transfer" : data})
+        resultat = jsonify({"status_code":200, "Payment" : data})
 
         return resultat
     except Exception as e:
@@ -78,31 +79,28 @@ def get_wiretransfers():
         db.session.close()
 
 
-
 #====================================================== UPDATE ===============================================
 
 
-@app.route('/wiretransfer/update', methods = ['POST', 'GET'])
-def wiretransfer_update():
+@app.route('/payment/update', methods = ['POST', 'GET'])
+def payment_update():
     try:
         data = request.json
         id = data["id"]
-        bankID = data['bankID']
-        bankName = data['bankName']
         amount = data['amount']
         payment_mode = data['payment_mode']
         orderId = data['orderId']
-        wiretransfer = WireTransfer.query.filter_by(id=id).first()
-        
-        if id and bankID and bankName and amount and payment_mode and orderId and request.method == 'POST':
 
-            wiretransfer.bankID = bankID
-            wiretransfer.bankName = bankName
-            wiretransfer.amount = amount
-            wiretransfer.payment_mode = payment_mode
+        payment = Payment.query.filter_by(id=id).first()
+        
+        if id and amount and payment_mode and orderId and request.method == 'POST':
+
+            payment.amount = amount
+            payment.payment_mode = payment_mode
+            payment.orderId = orderId
 
             db.session.commit()
-            resultat = jsonify('Wire Transfer is update')
+            resultat = jsonify('Payment is update')
             return resultat
     except Exception as e:
         print(e)
@@ -114,20 +112,21 @@ def wiretransfer_update():
 
 
 
+
 #====================================================== DELETE ===============================================
 
-###DELETE de wireTansfer
-@app.route('/wireTansfer/delete', methods = ['POST'])
-def delete_wire_transfer():
+###DELETE de payment
+@app.route('/payment/delete', methods = ['POST'])
+def delete_payment():
     try:
         json = request.json
         id = json['id']
 
-        wire_transfer = WireTransfer.query.filter_by(id=id).first()
+        payment = Payment.query.filter_by(id=id).first()
 
-        db.session.delete(wire_transfer)
+        db.session.delete(payment)
         db.session.commit()
-        resultat = jsonify('WireTransfer is successfully deleted')
+        resultat = jsonify('Payment is successfully deleted')
         return resultat
     except Exception as e:
         print(e)
@@ -136,5 +135,3 @@ def delete_wire_transfer():
     finally:
         db.session.rollback()
         db.session.close()
-
-

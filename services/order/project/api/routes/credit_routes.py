@@ -1,45 +1,44 @@
 from app import app
-from config import db
-from models.Check import Check
+from services.order.project.config import db
+from models.Credit import Credit
 from flask import Flask, request, jsonify, render_template
 
 from flask import Blueprint
-check_bp = Blueprint('check', __name__)
-
+credit_bp = Blueprint('credit', __name__)
 
 
 
 #---------------------------------------------------------------------------------------------------------
-#======================================================CHECK===============================================
+#======================================================CREDIT===============================================
 #---------------------------------------------------------------------------------------------------------
-
 
 
 #======================================================POST===============================================
 
 
-#Methode d'ajout check
+#Methode d'ajout credit
 
-@app.route('/check/add', methods = ['POST'])
-def check_add():
+@app.route('/credit/add', methods = ['POST'])
+def credit_add():
     try:
         json = request.json
         print(json)
-        name = json['name']
-        bankID = json['bankID']
+        number = json['number']
+        types = json['types']
+        expireDate = json['expireDate']
         amount = json['amount']
         payment_mode = json['payment_mode']
         orderId = json['orderId']
 
-        if name and bankID and request.method == 'POST':
+        if number and types and expireDate and request.method == 'POST':
            
             print("******************")
-            
-            checks = Check(name = name, bankID = bankID, amount = amount, payment_mode = payment_mode, orderId = orderId)
 
-            db.session.add(checks)
+            credit = Credit(number = number, types = types, expireDate = expireDate, amount = amount, payment_mode = payment_mode, orderId = orderId)
+
+            db.session.add(credit)
             db.session.commit()
-            resultat = jsonify('New Check add')
+            resultat = jsonify('New Credit add')
             return resultat
 
     except Exception as e :
@@ -53,22 +52,23 @@ def check_add():
 
 #======================================================GET===============================================
 
-#Methode GET pour Check
+#Methode GET pour Credit
 
-@app.route('/check', methods = ['GET'])
-def get_checks():
+@app.route('/credit', methods = ['GET'])
+def get_credits():
     try:
-        checksx = Check.query.all()
+        creditx = Credit.query.all()
         data = [
                 {
-                    "id":checks.id, 
-                    "name":checks.name, 
-                    "bankID":checks.bankID 
+                    "id":credit.id, 
+                    "number":credit.number, 
+                    "types":credit.types, 
+                    "expireDate":credit.expireDate
                 } 
-                for checks in checksx
+                for credit in creditx
                 ]
 
-        resultat = jsonify({"status_code":200, "Check" : data})
+        resultat = jsonify({"status_code":200, "Credit" : data})
 
         return resultat
     except Exception as e:
@@ -83,28 +83,31 @@ def get_checks():
 #====================================================== UPDATE ===============================================
 
 
-@app.route('/check/update', methods = ['POST', 'GET'])
-def check_update():
+@app.route('/credit/update', methods = ['POST', 'GET'])
+def credit_update():
     try:
         data = request.json
         id = data["id"]
-        name = data['name']
-        bankID = data['bankID']
+        number = data['number']
+        types = data['types']
+        expireDate = data['expireDate']
         amount = data['amount']
         payment_mode = data['payment_mode']
         orderId = data['orderId']
 
-        checks = Check.query.filter_by(id=id).first()
-        
-        if id and name and bankID and amount and payment_mode and orderId and request.method == 'POST':
 
-            checks.name = name
-            checks.bankID = bankID
-            checks.amount = amount
-            checks.payment_mode = payment_mode
-            checks.orderId = orderId
+        credit = Credit.query.filter_by(id=id).first()
+        
+        if id and number and types and expireDate and amount and payment_mode and orderId and request.method == 'POST':
+
+            credit.number = number
+            credit.types = types
+            credit.expireDate = expireDate
+            credit.amount = amount
+            credit.payment_mode = payment_mode
+            credit.orderId = orderId
             db.session.commit()
-            resultat = jsonify('Check is update')
+            resultat = jsonify('Credit is update')
             return resultat
     except Exception as e:
         print(e)
@@ -117,19 +120,18 @@ def check_update():
 
 #====================================================== DELETE ===============================================
 
-
-###DELETE de check
-@app.route('/check/delete', methods = ['POST'])
-def delete_check():
+###DELETE de credit
+@app.route('/credit/delete', methods = ['POST'])
+def delete_credit():
     try:
         json = request.json
         id = json['id']
 
-        check = Check.query.filter_by(id=id).first()
+        credit = Credit.query.filter_by(id=id).first()
 
-        db.session.delete(check)
+        db.session.delete(credit)
         db.session.commit()
-        resultat = jsonify('Check is successfully deleted')
+        resultat = jsonify('Credit is successfully deleted')
         return resultat
     except Exception as e:
         print(e)
