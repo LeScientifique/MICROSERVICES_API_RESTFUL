@@ -1,10 +1,9 @@
-from app import app
-from services.order.project.config import db
-from models.Order import Order
-from models.Payment import Payment
-from flask import Flask, request, jsonify, render_template
-
+from project import db
+from project.api.models import Order
+from project.api.models import Payment
+from flask import request, jsonify
 from flask import Blueprint
+
 payment_bp = Blueprint('payment', __name__)
 
 
@@ -17,7 +16,7 @@ payment_bp = Blueprint('payment', __name__)
 
 #Methode d'ajout payment
 
-@app.route('/payment/add', methods = ['POST'])
+@payment_bp.route('/payment/add', methods = ['POST'])
 def payment_add():
     try:
         json = request.json
@@ -53,7 +52,7 @@ def payment_add():
 
 #Methode GET pour payment
 
-@app.route('/payment', methods = ['GET'])
+@payment_bp.route('/payment', methods = ['GET'])
 def get_payments():
     try:
         paymentsx = Payment.query.all()
@@ -82,7 +81,7 @@ def get_payments():
 #====================================================== UPDATE ===============================================
 
 
-@app.route('/payment/update', methods = ['POST', 'GET'])
+@payment_bp.route('/payment/update', methods = ['POST', 'GET'])
 def payment_update():
     try:
         data = request.json
@@ -116,7 +115,7 @@ def payment_update():
 #====================================================== DELETE ===============================================
 
 ###DELETE de payment
-@app.route('/payment/delete', methods = ['POST'])
+@payment_bp.route('/payment/delete', methods = ['POST'])
 def delete_payment():
     try:
         json = request.json

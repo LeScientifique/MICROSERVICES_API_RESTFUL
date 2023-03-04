@@ -1,11 +1,10 @@
-from app import app
-from services.order.project.config import db
-from models.Item import Item
-from models.Order import Order
-from models.OrderDetail import OrderDetail
-from flask import Flask, request, jsonify, render_template
-
+from project import db
+from project.api.models import Item
+from project.api.models import Order
+from project.api.models import OrderDetail
+from flask import request, jsonify
 from flask import Blueprint
+
 orderDetail_bp = Blueprint('orderDetail', __name__)
 
 
@@ -18,7 +17,7 @@ orderDetail_bp = Blueprint('orderDetail', __name__)
 
 #Methode d'ajout orderDetail
 
-@app.route('/orderDetail/add', methods = ['POST'])
+@orderDetail_bp.route('/orderDetail/add', methods = ['POST'])
 def orderdetail_add():
     try:
         json = request.json
@@ -62,7 +61,7 @@ def orderdetail_add():
 
 #Methode GET pour orderDetail
 
-@app.route('/orderDetail', methods = ['GET'])
+@orderDetail_bp.route('/orderDetail', methods = ['GET'])
 def get_orderdetails():
     try:
         order_detailsx = OrderDetail.query.all()
@@ -93,7 +92,7 @@ def get_orderdetails():
 #====================================================== UPDATE ===============================================
 
 
-@app.route('/order-detail/update', methods = ['POST', 'GET'])
+@orderDetail_bp.route('/order-detail/update', methods = ['POST', 'GET'])
 def orderdetail_update():
     try:
         data = request.json
@@ -128,7 +127,7 @@ def orderdetail_update():
 #====================================================== DELETE ===============================================
 
 ###DELETE de orderDetail
-@app.route('/orderDetail/delete', methods = ['POST'])
+@orderDetail_bp.route('/orderDetail/delete', methods = ['POST'])
 def delete_order_detail():
     try:
         json = request.json

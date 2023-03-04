@@ -1,11 +1,8 @@
-from app import app
-from services.order.project.config import db
-from models import WireTransfer
-from models.WireTransfer import WireTransfer
-
-from flask import Flask, request, jsonify, render_template
-
+from project import db
+from project.api.models import WireTransfer
+from flask import request, jsonify
 from flask import Blueprint
+
 wireTransfer_bp = Blueprint('wireTransfer', __name__)
 
 #---------------------------------------------------------------------------------------------------------
@@ -17,7 +14,7 @@ wireTransfer_bp = Blueprint('wireTransfer', __name__)
 
 #Methode d'ajout wireTransfer
 
-@app.route('/wiretransfer/add', methods = ['POST'])
+@wireTransfer_bp.route('/wiretransfer/add', methods = ['POST'])
 def wiretransfer_add():
     try:
         json = request.json
@@ -53,7 +50,7 @@ def wiretransfer_add():
 
 #Methode GET pour wireTransfer
 
-@app.route('/wireTransfer', methods = ['GET'])
+@wireTransfer_bp.route('/wireTransfer', methods = ['GET'])
 def get_wiretransfers():
     try:
         wiretransferx = WireTransfer.query.all()
@@ -82,7 +79,7 @@ def get_wiretransfers():
 #====================================================== UPDATE ===============================================
 
 
-@app.route('/wiretransfer/update', methods = ['POST', 'GET'])
+@wireTransfer_bp.route('/wiretransfer/update', methods = ['POST', 'GET'])
 def wiretransfer_update():
     try:
         data = request.json
@@ -117,7 +114,7 @@ def wiretransfer_update():
 #====================================================== DELETE ===============================================
 
 ###DELETE de wireTansfer
-@app.route('/wireTansfer/delete', methods = ['POST'])
+@wireTransfer_bp.route('/wireTansfer/delete', methods = ['POST'])
 def delete_wire_transfer():
     try:
         json = request.json

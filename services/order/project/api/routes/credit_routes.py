@@ -1,9 +1,8 @@
-from app import app
-from services.order.project.config import db
-from models.Credit import Credit
-from flask import Flask, request, jsonify, render_template
-
+from project import db
+from project.api.models import Credit
+from flask import request, jsonify
 from flask import Blueprint
+
 credit_bp = Blueprint('credit', __name__)
 
 
@@ -18,7 +17,7 @@ credit_bp = Blueprint('credit', __name__)
 
 #Methode d'ajout credit
 
-@app.route('/credit/add', methods = ['POST'])
+@credit_bp.route('/credit/add', methods = ['POST'])
 def credit_add():
     try:
         json = request.json
@@ -54,7 +53,7 @@ def credit_add():
 
 #Methode GET pour Credit
 
-@app.route('/credit', methods = ['GET'])
+@credit_bp.route('/credit', methods = ['GET'])
 def get_credits():
     try:
         creditx = Credit.query.all()
@@ -83,7 +82,7 @@ def get_credits():
 #====================================================== UPDATE ===============================================
 
 
-@app.route('/credit/update', methods = ['POST', 'GET'])
+@credit_bp.route('/credit/update', methods = ['POST', 'GET'])
 def credit_update():
     try:
         data = request.json
@@ -121,7 +120,7 @@ def credit_update():
 #====================================================== DELETE ===============================================
 
 ###DELETE de credit
-@app.route('/credit/delete', methods = ['POST'])
+@credit_bp.route('/credit/delete', methods = ['POST'])
 def delete_credit():
     try:
         json = request.json

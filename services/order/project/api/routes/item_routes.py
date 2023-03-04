@@ -1,9 +1,8 @@
-from app import app
-from services.order.project.config import db
-from models.Item import Item
-from flask import Flask, request, jsonify, render_template
-
+from project import db
+from project.api.models import Item
+from flask import request, jsonify
 from flask import Blueprint
+
 item_bp = Blueprint('item', __name__)
 
 
@@ -16,7 +15,7 @@ item_bp = Blueprint('item', __name__)
 
 #Methode d'ajout item
 
-@app.route('/item/add', methods = ['POST'])
+@item_bp.route('/item/add', methods = ['POST'])
 def item_add():
     try:
         json = request.json
@@ -48,7 +47,7 @@ def item_add():
 
 #Methode GET pour Item
 
-@app.route('/item', methods = ['GET'])
+@item_bp.route('/item', methods = ['GET'])
 def get_items():
     try:
         itemsx = Item.query.all()
@@ -76,7 +75,7 @@ def get_items():
 #====================================================== UPDATE ===============================================
 
 
-@app.route('/item/update', methods = ['POST', 'GET'])
+@item_bp.route('/item/update', methods = ['POST', 'GET'])
 def item_update():
     try:
         data = request.json
@@ -105,7 +104,7 @@ def item_update():
 #====================================================== DELETE ===============================================
 
 ###DELETE de item
-@app.route('/item/delete', methods = ['POST'])
+@item_bp.route('/item/delete', methods = ['POST'])
 def delete_item():
     try:
         json = request.json

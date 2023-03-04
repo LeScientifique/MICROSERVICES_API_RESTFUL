@@ -1,127 +1,126 @@
-from app import app
-from services.order.project.config import db
-from models.Cash import Cash
-from flask import Flask, request, jsonify
-
+from project import db
+from project.api.models import Cash
+from flask import request, jsonify
 from flask import Blueprint
-cash_bp = Blueprint('cash', __name__)
+
 
 #---------------------------------------------------------------------------------------------------------
 #======================================================CASH===============================================
 #---------------------------------------------------------------------------------------------------------
+class Cash_routes():
+    cash_bp = Blueprint('cash', __name__)
 
+    #======================================================POST===============================================
 
-#======================================================POST===============================================
+    #Methode d'ajout cash
 
-#Methode d'ajout cash
+    @cash_bp.route('/Cash/add', methods = ['POST'])
+    def cash_add():
+        try:
+            json = request.json
+            print(json)
+            cashTendered = json['cashTendered']
+            amount = json['amount']
+            payment_mode = json['payment_mode']
+            orderId = json['orderId']
 
-@app.route('/Cash/add', methods = ['POST'])
-def cash_add():
-    try:
-        json = request.json
-        print(json)
-        cashTendered = json['cashTendered']
-        amount = json['amount']
-        payment_mode = json['payment_mode']
-        orderId = json['orderId']
-
-        if cashTendered and request.method == 'POST':
-           
-            print("******************")
-           
-            cashs = Cash(cashTendered = cashTendered, amount = amount, payment_mode = payment_mode, orderId = orderId)
+            if cashTendered and request.method == 'POST':
             
-            db.session.add(cashs)
-            db.session.commit()
-            resultat = jsonify('New Cash add')
+                print("******************")
+            
+                cashs = Cash(cashTendered = cashTendered, amount = amount, payment_mode = payment_mode, orderId = orderId)
+                
+                db.session.add(cashs)
+                db.session.commit()
+                resultat = jsonify('New Cash add')
+                return resultat
+
+        except Exception as e :
+            print(e)
+            resultat = {"code_status" : 400,"message" : "Error" }
+            return jsonify(resultat)
+        finally :
+            db.session.rollback()
+            db.session.close()
+
+    #======================================================GET===============================================
+
+    #Methode GET pour Cash
+
+    @cash_bp.route('/cash', methods = ['GET'])
+    def get_cashs():
+        try:
+            cashsx = Cash.query.all()
+            data = [
+                    {
+                        "id":cashs.id, 
+                        "cashTendered":cashs.cashTendered
+                    } 
+                    for cashs in cashsx
+                    ]
+
+            resultat = jsonify({"status_code":200, "Cash" : data})
             return resultat
-
-    except Exception as e :
-        print(e)
-        resultat = {"code_status" : 400,"message" : "Error" }
-        return jsonify(resultat)
-    finally :
-        db.session.rollback()
-        db.session.close()
-
-#======================================================GET===============================================
-
-#Methode GET pour Cash
-
-@app.route('/cash', methods = ['GET'])
-def get_cashs():
-    try:
-        cashsx = Cash.query.all()
-        data = [
-                {
-                    "id":cashs.id, 
-                    "cashTendered":cashs.cashTendered
-                } 
-                for cashs in cashsx
-                ]
-
-        resultat = jsonify({"status_code":200, "Cash" : data})
-        return resultat
-    except Exception as e:
-        print(e)
-        resultat = {"code_status" : 400, "message" : 'Error'}
-        return resultat
-    finally:
-        db.session.rollback()
-        db.session.close()
-
-#====================================================== UPDATE ===============================================
-
-
-@app.route('/cash/update', methods = ['POST', 'GET'])
-def cash_update():
-    try:
-        data = request.json
-        id = data["id"]
-        cashTendered = data['cashTendered']
-        amount = data['amount']
-        payment_mode = data['payment_mode']
-        orderId = data['orderId']
-
-        cashs = Cash.query.filter_by(id=id).first()
-        
-        if id and cashTendered and amount and payment_mode and orderId and request.method == 'POST':
-
-            cashs.cashTendered = cashTendered
-            cashs.amount = amount
-            cashs.payment_mode = payment_mode
-            cashs.orderId = orderId
-            db.session.commit()
-            resultat = jsonify('Cash is update')
+        except Exception as e:
+            print(e)
+            resultat = {"code_status" : 400, "message" : 'Error'}
             return resultat
-    except Exception as e:
-        print(e)
-        resultat = {"code_status": 400, "message": 'Error'}
-        return jsonify(resultat)
-    finally:
-        db.session.rollback()
-        db.session.close()
+        finally:
+            db.session.rollback()
+            db.session.close()
+
+    #====================================================== UPDATE ===============================================
 
 
-#====================================================== DELETE ===============================================
+    @cash_bp.route('/cash/update', methods = ['POST', 'GET'])
+    def cash_update():
+        try:
+            data = request.json
+            id = data["id"]
+            cashTendered = data['cashTendered']
+            amount = data['amount']
+            payment_mode = data['payment_mode']
+            orderId = data['orderId']
 
-###DELETE de cash
-@app.route('/cash/delete', methods = ['POST'])
-def delete_cash():
-    try:
-        json = request.json
-        id = json['id']
+            cashs = Cash.query.filter_by(id=id).first()
+            
+            if id and cashTendered and amount and payment_mode and orderId and request.method == 'POST':
 
-        cash = Cash.query.filter_by(id=id).first()
+                cashs.cashTendered = cashTendered
+                cashs.amount = amount
+                cashs.payment_mode = payment_mode
+                cashs.orderId = orderId
+                db.session.commit()
+                resultat = jsonify('Cash is update')
+                return resultat
+        except Exception as e:
+            print(e)
+            resultat = {"code_status": 400, "message": 'Error'}
+            return jsonify(resultat)
+        finally:
+            db.session.rollback()
+            db.session.close()
 
-        db.session.delete(cash)
-        db.session.commit()
-        resultat = jsonify('Cash is successfully deleted')
-        return resultat
-    except Exception as e:
-        print(e)
-        resultat = {"code_status": 400, "message": 'Error'}
-        return resultat
-    finally:
-        db.session.rollback()
-        db.session.close()
+
+    #====================================================== DELETE ===============================================
+
+    ###DELETE de cash
+    @cash_bp.route('/cash/delete', methods = ['POST'])
+    def delete_cash():
+        try:
+            json = request.json
+            id = json['id']
+
+            cash = Cash.query.filter_by(id=id).first()
+
+            db.session.delete(cash)
+            db.session.commit()
+            resultat = jsonify('Cash is successfully deleted')
+            return resultat
+        except Exception as e:
+            print(e)
+            resultat = {"code_status": 400, "message": 'Error'}
+            return resultat
+        finally:
+            db.session.rollback()
+            db.session.close()

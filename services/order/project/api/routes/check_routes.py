@@ -1,9 +1,8 @@
-from app import app
-from services.order.project.config import db
-from models.Check import Check
-from flask import Flask, request, jsonify, render_template
-
+from project import db
+from project.api.models import Check
+from flask import request, jsonify
 from flask import Blueprint
+
 check_bp = Blueprint('check', __name__)
 
 
@@ -20,7 +19,7 @@ check_bp = Blueprint('check', __name__)
 
 #Methode d'ajout check
 
-@app.route('/check/add', methods = ['POST'])
+@check_bp.route('/check/add', methods = ['POST'])
 def check_add():
     try:
         json = request.json
@@ -55,7 +54,7 @@ def check_add():
 
 #Methode GET pour Check
 
-@app.route('/check', methods = ['GET'])
+@check_bp.route('/check', methods = ['GET'])
 def get_checks():
     try:
         checksx = Check.query.all()
@@ -83,7 +82,7 @@ def get_checks():
 #====================================================== UPDATE ===============================================
 
 
-@app.route('/check/update', methods = ['POST', 'GET'])
+@check_bp.route('/check/update', methods = ['POST', 'GET'])
 def check_update():
     try:
         data = request.json
@@ -119,7 +118,7 @@ def check_update():
 
 
 ###DELETE de check
-@app.route('/check/delete', methods = ['POST'])
+@check_bp.route('/check/delete', methods = ['POST'])
 def delete_check():
     try:
         json = request.json

@@ -1,10 +1,9 @@
-from app import app
-from services.order.project.config import db
-from models.Customer import Customer
-from models.Order import Order
-from flask import Flask, request, jsonify, render_template
-
+from project import db
+from project.api.models import Customer
+from project.api.models import Order
+from flask import request, jsonify
 from flask import Blueprint
+
 order_bp = Blueprint('order', __name__)
 
 
@@ -17,7 +16,7 @@ order_bp = Blueprint('order', __name__)
 
 #Methode d'ajout order
 
-@app.route('/order/add', methods = ['POST'])
+@order_bp.route('/order/add', methods = ['POST'])
 def order_add():
     try:
         json = request.json
@@ -53,7 +52,7 @@ def order_add():
 
 #Methode GET pour Cash
 
-@app.route('/order', methods = ['GET'])
+@order_bp.route('/order', methods = ['GET'])
 def get_orders():
     try:
         ordersx = Order.query.all()
@@ -81,7 +80,7 @@ def get_orders():
 #====================================================== UPDATE ===============================================
 
 
-@app.route('/order/update', methods = ['POST', 'GET'])
+@order_bp.route('/order/update', methods = ['POST', 'GET'])
 def order_update():
     try:
         data = request.json
@@ -111,7 +110,7 @@ def order_update():
 #====================================================== DELETE ===============================================
 
 ###DELETE de order
-@app.route('/order/delete', methods = ['POST'])
+@order_bp.route('/order/delete', methods = ['POST'])
 def delete_order():
     try:
         json = request.json

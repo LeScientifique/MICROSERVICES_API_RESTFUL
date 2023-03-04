@@ -1,9 +1,8 @@
-from app import app
-from services.order.project.config import db
-from models.Customer import Customer
-from flask import Flask, request, jsonify, render_template
-
+from project import db
+from project.api.models import Customer
+from flask import request, jsonify
 from flask import Blueprint
+
 customer_bp = Blueprint('customer', __name__)
 
 
@@ -18,7 +17,7 @@ customer_bp = Blueprint('customer', __name__)
 
 #Methode d'ajout customer
 
-@app.route('/customer/add', methods = ['POST'])
+@customer_bp.route('/customer/add', methods = ['POST'])
 def customer_add():
     try:
         json = request.json
@@ -52,7 +51,7 @@ def customer_add():
 
 #Methode GET pour Customer
 
-@app.route('/customers', methods = ['GET'])
+@customer_bp.route('/customers', methods = ['GET'])
 def get_customers():
     try:
         customersx = Customer.query.all()
@@ -82,7 +81,7 @@ def get_customers():
 #====================================================== UPDATE ===============================================
 
 
-@app.route('/customer/update', methods = ['POST', 'GET'])
+@customer_bp.route('/customer/update', methods = ['POST', 'GET'])
 def customer_update():
     try:
         data = request.json
@@ -114,7 +113,7 @@ def customer_update():
 #====================================================== DELETE ===============================================
 
 ###DELETE de customer
-@app.route('/customer/delete', methods = ['POST'])
+@customer_bp.route('/customer/delete', methods = ['POST'])
 def delete_customer():
     try:
         json = request.json

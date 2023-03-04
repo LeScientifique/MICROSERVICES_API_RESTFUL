@@ -1,9 +1,8 @@
-from app import app
-from services.order.project.config import db
-from models.OrderStatus import OrderStatus
-from flask import Flask, request, jsonify, render_template
-
+from project import db
+from project.api.models import OrderStatus
+from flask import request, jsonify
 from flask import Blueprint
+
 orderStatus_bp = Blueprint('orderStatus', __name__)
 
 
@@ -16,7 +15,7 @@ orderStatus_bp = Blueprint('orderStatus', __name__)
 
 #Methode d'ajout orderStatus
 
-@app.route('/orderStatus/add', methods = ['POST'])
+@orderStatus_bp.route('/orderStatus/add', methods = ['POST'])
 def orderstatus_add():
     try:
         json = request.json
@@ -50,7 +49,7 @@ def orderstatus_add():
 
 #Methode GET pour orderStatus
 
-@app.route('/orderStatus', methods = ['GET'])
+@orderStatus_bp.route('/orderStatus', methods = ['GET'])
 def get_orderstatus():
     try:
         orderstatusx = OrderStatus.query.all()
@@ -80,7 +79,7 @@ def get_orderstatus():
 #====================================================== UPDATE ===============================================
 
 
-@app.route('/order-status/update', methods = ['POST', 'GET'])
+@orderStatus_bp.route('/order-status/update', methods = ['POST', 'GET'])
 def orderstatus_update():
     try:
         data = request.json
@@ -115,7 +114,7 @@ def orderstatus_update():
 #====================================================== DELETE ===============================================
 
 ###DELETE de orderStatus
-@app.route('/orderStatus/delete', methods = ['POST'])
+@orderStatus_bp.route('/orderStatus/delete', methods = ['POST'])
 def delete_order_status():
     try:
         json = request.json

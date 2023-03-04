@@ -1,5 +1,5 @@
-from services.order.project.config import db
-from models.Payment import Payment
+from project.__init__ import db
+from project.api.models import Payment
 
 
 class Cash (Payment):
@@ -11,3 +11,4 @@ class Cash (Payment):
     _mapper_args_ = {
         'polymorphic_identity' : 'cash'
     }
+    

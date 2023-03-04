@@ -1,5 +1,5 @@
-from services.order.project.config import db
-from models.Payment import Payment
+from project import db
+from project.api.models import Payment
 
 class WireTransfer (Payment):
     id = db.Column(db.Integer, db.ForeignKey('payment.id'), primary_key=True)
